@@ -1,0 +1,19 @@
+#Tue Feb 28 16:47:11 ALMT 2017
+IinDirectory=/orapool/pc/ibso/iin_list/import/
+curDirectory=/orapool/armcft/OracleRep/KURS/
+CurrFrom=HQ@nationalbank.kz
+IinVinUserName=iibtest
+port=143
+IinEnc=UTF-16LE
+IinMsgId=507
+OutEnc=cp1251
+VinMsgId=499
+host=lotus1.kazincombank.kz
+CurrMsgId=8227
+CurrPassword=12345678
+saveDirectory=/home/IIB/appfiles/Source/EmailArh/
+VinFrom=mvd.kz
+VinDirectory=/orapool/pc/ibso/Vin/Inp/
+IinVinPassword=Aa111111
+IinFrom=mgd.kz
+CurrUserName=currency
