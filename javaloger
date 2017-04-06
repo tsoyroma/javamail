@@ -1,0 +1,108 @@
+package kz.rbk.corelib.utils;
+
+import java.sql.*;
+import java.util.List;
+
+import com.ibm.broker.javacompute.MbJavaComputeNode;
+import com.ibm.broker.plugin.MbElement;
+import com.ibm.broker.plugin.MbException;
+import com.ibm.broker.plugin.MbMessage;
+import com.ibm.broker.plugin.MbMessageAssembly;
+import com.ibm.broker.plugin.MbOutputTerminal;
+import com.ibm.broker.plugin.MbUserException;
+import com.ibm.broker.plugin.MbXPath;
+
+
+/*
+ * 
+ * MbOutputTerminal out = getOutputTerminal("out");
+
+		MbMessage inMessage = inAssembly.getMessage();
+		MbElement mess = inMessage.getRootElement().getLastChild();
+		MbElement mailbox = mess
+				.getFirstElementByPath("root/request/ation/mailbox");
+		String mail = mailbox.getValueAsString();
+		MbMessageAssembly outAssembly = null;
+ */
+public class LogWriter_JavaCompute extends MbJavaComputeNode {
+
+	public void evaluate(MbMessageAssembly inAssembly) throws MbException {
+		MbOutputTerminal out = getOutputTerminal("out");
+		//MbOutputTerminal alt = getOutputTerminal("alternate");
+
+		MbMessage inMessage = inAssembly.getMessage();
+		MbElement mess = inMessage.getRootElement().getLastChild();
+		MbElement mb_operation_uid = mess.getFirstElementByPath("Message/operation_uid");
+		MbElement mb_parser_name = mess.getFirstElementByPath("Message/parser_name");
+		MbElement mb_req_date = mess.getFirstElementByPath("Message/req_date");
+		MbElement mb_message_identifier = mess.getFirstElementByPath("Message/message_identifier");
+		MbElement mb_headers = mess.getFirstElementByPath("Message/headers");
+		MbElement mb_localenv = mess.getFirstElementByPath("Message/localenv");
+		MbElement mb_environment = mess.getFirstElementByPath("Message/environment");
+		MbElement mb_exceptionlist = mess.getFirstElementByPath("Message/exceptionlist");
+		MbElement mb_loglevel = mess.getFirstElementByPath("Message/loglevel");
+		MbElement mb_broker_name = mess.getFirstElementByPath("Message/broker_name");
+		MbElement mb_int_server = mess.getFirstElementByPath("Message/int_server");
+		MbElement mb_application_name = mess.getFirstElementByPath("Message/application_name");
+		MbElement mb_message_flow = mess.getFirstElementByPath("Message/message_flow");
+		MbElement mb_key_val = mess.getFirstElementByPath("Message/key_val");
+		MbElement mb_asText = mess.getFirstElementByPath("Message/asText");
+		MbElement mb_status = mess.getFirstElementByPath("Message/status");
+
+		String operation_uid = mb_operation_uid.getValueAsString();
+		String parser_name = mb_parser_name.getValueAsString();
+		String req_date = mb_req_date.getValueAsString();
+		String message_identifier = mb_message_identifier.getValueAsString();
+		String headers = mb_headers.getValueAsString();
+		String localenv = mb_localenv.getValueAsString();
+		String environment = mb_environment.getValueAsString();
+		String exceptionlist = mb_exceptionlist.getValueAsString();
+		String loglevel = mb_loglevel.getValueAsString();
+		String broker_name = mb_broker_name.getValueAsString();
+		String int_server = mb_int_server.getValueAsString();
+		String application_name = mb_application_name.getValueAsString();
+		String message_flow = mb_message_flow.getValueAsString();
+		String key_val = mb_key_val.getValueAsString();
+		String asText = mb_asText.getValueAsString();
+		String status = mb_status.getValueAsString();
+		MbMessageAssembly outAssembly = null;
+		try {
+			MbMessage outMessage = new MbMessage(inMessage);
+			outAssembly = new MbMessageAssembly(inAssembly, outMessage);
+			
+			//MbElement root = inMessage.getRootElement();
+			Connection con = this.getJDBCType4Connection("IIBDB_TEST", JDBC_TransactionType.MB_TRANSACTION_AUTO); 
+			String res = null;
+
+			PreparedStatement st = con.prepareStatement("select insert_message(?,?,?::timestamp,?::varchar,?::jsonb,?::xml,?::xml,?::xml,?::varchar,?::varchar,?::varchar,?::varchar,?::varchar,?::jsonb,?::xml,?::varchar)");
+			st.
+			/*
+			PreparedStatement st = con.prepareStatement("select message_convert(?::varchar,?::timestamp,?::varchar)");
+			
+			st.setString(1, parser_name);
+			st.setString(2, req_date);
+			st.setString(3, asText);
+*/
+			ResultSet rs = st.executeQuery();
+			while (rs.next())
+			{
+				res = rs.getString(1);
+				   
+			}
+			rs.close();
+			st.close(); 
+			//if (con == null)
+				//throw new MbUserException(this, "getBrokerConnection()", "", "", "BrokerConnection is null", null);	
+			// End of user code
+			// ----------------------------------------------------------
+		} catch (SQLException eqx) {
+			eqx.printStackTrace();
+		} catch (Exception e) {
+
+			throw new MbUserException(this, "evaluate()", "", "", e.toString(),
+					null);}
+		//out.propagate(outAssembly);
+
+	}
+
+}
